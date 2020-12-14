@@ -1,7 +1,9 @@
 package com.college.courseselection;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,14 +29,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     Spinner spco;
     Button btnadd;
-    RadioButton rdbgrad,rdbungrad;
+    RadioButton rdb;
     CheckBox chbacc,chbmed;
     TextView tvfee,tvhour,tvtotfee,tvtothour,tverr;
+    RadioGroup rdg;
+
 
     public static double originalPrice =0;
     public static double totalfees =0;
     public static double totalhours =0;
-    double totfee;
+    double totfee,tothour;
 
 
     @Override
@@ -46,14 +53,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         spco=findViewById(R.id.spcourse);
         btnadd=findViewById(R.id.btnaddcourse);
-        rdbgrad=findViewById(R.id.rbgrad);
-        rdbungrad=findViewById(R.id.rbungrad);
+       // rdbgrad=findViewById(R.id.rbgrad);
+       // rdbungrad=findViewById(R.id.rbungrad);
         chbacc=findViewById(R.id.cbaccod);
         chbmed=findViewById(R.id.cbmedical);
         tvfee=findViewById(R.id.tvcofee);
         tvhour=findViewById(R.id.tvchours);
         tvtothour=findViewById(R.id.tvtothour);
         tvtotfee=findViewById(R.id.tvtotfee);
+        rdg = findViewById(R.id.radioGroup);
 
         tverr=findViewById(R.id.txterror);
 
@@ -70,11 +78,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         spco.setOnItemSelectedListener(this);
 
-        rdbgrad.setOnClickListener(new RadioButtonsAction());
-        rdbungrad.setOnClickListener(new RadioButtonsAction());
+        //rdbgrad.setOnClickListener(new RadioButtonsAction());
+        //rdbungrad.setOnClickListener(new RadioButtonsAction());
 
         btnadd.setOnClickListener(this);
-
+        chbacc.setOnCheckedChangeListener(new CheckBoxActions());
+        chbmed.setOnCheckedChangeListener(new CheckBoxActions());
 
     }
 
@@ -88,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void fillData() {
 
-        courseList.add(new Course("Java",800,25,course[0]));
-        courseList.add(new Course("Swift",700,30,course[1]));
-        courseList.add(new Course("Ios",1000,45,course[2]));
-        courseList.add(new Course("Android",1200,55,course[3]));
-        courseList.add(new Course("Database",900,20,course[4]));
+        courseList.add(new Course("Java",1300,6,course[0]));
+        courseList.add(new Course("Swift",1500,5,course[1]));
+        courseList.add(new Course("Ios",1350,5,course[2]));
+        courseList.add(new Course("Android",1400,7,course[3]));
+        courseList.add(new Course("Database",1000,4,course[4]));
 
     }
 
@@ -126,6 +135,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+
+    public  void checkrdbtn(View v)
+    {
+        int rid = rdg.getCheckedRadioButtonId();
+
+        rdb = findViewById(rid);
+
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -134,19 +152,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             double currentfees = Double.parseDouble(tvfee.getText().toString());
             double currenthour = Double.parseDouble(tvhour.getText().toString());
 
+                String rc = String.valueOf(rdb.getText());
 
-            if(v.getId()==R.id.rbgrad)
-            {
-
-                if (totfee<=21) {
-                    totfee += currentfees;
-                    tvtotfee.setText(String.valueOf(totfee));
-                }
-                else
+                if(rc == "Graduated")
+                // tvtotfee.setText(String.valueOf(currentfees));
+                    //tvtothour.setText(String.valueOf(currenthour));
                 {
-                    tverr.setText("Sorry");
+                    double th = Double.parseDouble(tvtothour.getText().toString());
+                    if(th < 21)
+                    {
+                        totfee += currentfees;
+                        tvtotfee.setText(String.valueOf(totfee));
+                        tothour += currenthour;
+                        tvtothour.setText(String.valueOf(tothour));
+                    }
+                    else
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setMessage("Maximum hours added")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //do things
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
                 }
-            }
 
 
            /* if(rdbgrad.isSelected())
@@ -180,20 +213,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private class RadioButtonsAction implements View.OnClickListener{
 
+
+    private class CheckBoxActions implements CompoundButton.OnCheckedChangeListener {
         @Override
-        public void onClick(View view) {
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+            double currentfees = Double.parseDouble(tvtotfee.getText().toString());
 
+            if(buttonView.getId()==R.id.cbaccod)
+                if(chbacc.isChecked())
+                    currentfees+=1000;
+                else
+                    currentfees-=1000;
 
-           // else if(view.getId()==R.id.rbungrad)
-              //  price.setText(String.format("%.2f",originalPrice*1.5));*/
+            if(buttonView.getId()==R.id.cbmedical)
+                if(chbmed.isChecked())
+                    currentfees+=700;
+                else
+                    currentfees-=700;
 
+            tvtotfee.setText(String.valueOf(currentfees));
 
 
 
         }
     }
-
 }

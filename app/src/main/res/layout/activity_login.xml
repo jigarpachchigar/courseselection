@@ -17,6 +17,7 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="340dp"
         android:ems="10"
+        android:inputType="numberPassword"
         android:hint="Password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

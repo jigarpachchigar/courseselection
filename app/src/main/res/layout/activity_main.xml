@@ -174,12 +174,15 @@
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layout_weight="1"
+            android:checked="true"
+            android:onClick="checkrdbtn"
             android:text="Graduated" />
 
         <RadioButton
             android:id="@+id/rbungrad"
             android:layout_width="100dp"
             android:layout_height="35dp"
+            android:onClick="checkrdbtn"
             android:layout_weight="1"
             android:text="Ungraduated" />
     </RadioGroup>
