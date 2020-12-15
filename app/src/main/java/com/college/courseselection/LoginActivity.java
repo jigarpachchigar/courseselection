@@ -99,8 +99,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
             else{
-                Toast.makeText(getApplicationContext(),
-                        "Please Enter Valid UserID", Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Invalid Password")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //do things
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
                 cnt++;
                 epwd.setText("");
                 epwd.requestFocus();

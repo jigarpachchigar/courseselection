@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         tvtotfee=findViewById(R.id.tvtotfee);
         rdg = findViewById(R.id.radioGroup);
 
+
         tverr=findViewById(R.id.txterror);
 
         Intent inlog = getIntent();
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //rdbungrad.setOnClickListener(new RadioButtonsAction());
 
         btnadd.setOnClickListener(this);
+
+
         chbacc.setOnCheckedChangeListener(new CheckBoxActions());
         chbmed.setOnCheckedChangeListener(new CheckBoxActions());
 
@@ -136,20 +140,147 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-    public  void checkrdbtn(View v)
+    /*public  void checkrdbtn(View v)
     {
         int rid = rdg.getCheckedRadioButtonId();
 
-        rdb = findViewById(rid);
+        tvtotfee.setText(String.valueOf(rid));
+       // rdb = findViewById(rid);
+
+//        String rdbval = String.valueOf(rdb.getText());
+
+        totfee = 0;
+        tothour = 0;
+
+      *//*  if (rdbval == "Graduated")
+        {
+            double currentfees = Double.parseDouble(tvfee.getText().toString());
+            double currenthour = Double.parseDouble(tvhour.getText().toString());
+
+
+            if (currenthour <= 21)
+            {
+
+                totfee += currentfees;
+                tvtotfee.setText(String.valueOf(totfee));
+                tothour += currenthour;
+                tvtothour.setText(String.valueOf(tothour));
+            }
+            else
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Sorry! Limit Exceeded")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //do things
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+    *//*
 
     }
-
+*/
     @Override
     public void onClick(View v) {
 
+        double reset = 0;
+
+        double currentfees = Double.parseDouble(tvfee.getText().toString());
+        double currenthour = Double.parseDouble(tvhour.getText().toString());
+
+        //  checkrdbtn(v);
+        if (v == btnadd) {
+
+
+            //Log.i("RIDD", "grad");
+           // double th = Double.parseDouble(tvtothour.getText().toString());
+            if(tothour < 21)
+            {
+                totfee += currentfees;
+                tvtotfee.setText(String.valueOf(totfee));
+                tothour += currenthour;
+                tvtothour.setText(String.valueOf(tothour));
+            }
+            else
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Sorry ! Can't Add")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //do things
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+
+/*
+            rdg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                    tvtotfee.setText(String.valueOf(reset));
+                    tvtothour.setText(String.valueOf(reset));
+
+
+                    int selectedId = rdg.getCheckedRadioButtonId();
+                    // Log.i("RID", String.valueOf(selectedId));
+
+                    if (selectedId == 2131230985) {
+
+                        //Log.i("RIDD", "grad");
+                        double th = Double.parseDouble(tvtothour.getText().toString());
+                        if(th < 21)
+                        {
+                            totfee += currentfees;
+                            tvtotfee.setText(String.valueOf(totfee));
+                            tothour += currenthour;
+                            tvtothour.setText(String.valueOf(tothour));
+                        }
+                        else
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("Sorry ! Can't Add")
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            //do things
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+
+
+                    } else if (selectedId == 2131230986) {
+
+                        Log.i("RIDD1", "ungrad");
+
+
+                    }
+
+                }
+            });
+*/
+        }
+        }
+
+
+
+    /*public void onClick(View v) {
+
         if (v == btnadd)
         {
-            double currentfees = Double.parseDouble(tvfee.getText().toString());
+
+            checkrdbtn(v);
+
+           *//* double currentfees = Double.parseDouble(tvfee.getText().toString());
             double currenthour = Double.parseDouble(tvhour.getText().toString());
 
                 String rc = String.valueOf(rdb.getText());
@@ -206,12 +337,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 {
                     tverr.setText("Sorry!Can't Select");
                 }
-            }*/
+            }*//*
 
 
         }
 
-    }
+    }*/
 
 
 
