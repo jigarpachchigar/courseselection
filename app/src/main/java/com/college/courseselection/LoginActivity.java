@@ -3,6 +3,7 @@ package com.college.courseselection;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -44,47 +45,54 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if  (v  == btnlog)
         {
+
             String struname = eun.getText().toString();
             String struid = euid.getText().toString();
             String strpw = epwd.getText().toString();
 
+            boolean blun = struid.equals(" ");
             boolean bluid = struid.equals("student1");
             boolean blpwd = strpw.equals("123456");
 
-            if(bluid && blpwd) {
-                Intent inlog = new Intent(getApplicationContext(),
-                        MainActivity.class);
-                inlog.putExtra("name", struname);
-                cnt = 0;
-                startActivity(inlog);
+            if( bluid && blpwd && blun==false ) {
+
+
+                 if ( struname.matches(" ")) {
+                     eun.setError("Enter Student Name");
+                     return;
+
+                 }else {
+                     Intent inlog = new Intent(getApplicationContext(),
+                             MainActivity.class);
+                     inlog.putExtra("name", struname);
+                     cnt = 0;
+                     startActivity(inlog);
+                 }
+
 
             }
 
-            else if( bluid == false && blpwd == false){
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Invalid UserID or password")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //do things
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
+            else if( TextUtils.isEmpty(struname) || TextUtils.isEmpty(struid) || TextUtils.isEmpty(strpw)){
 
-                cnt++;
-                eun.setText("");
+                eun.setError("Enter Student Name");
+                epwd.setError("Enter Password");
+                euid.setError("Enter Username");
+
+                eun.setText(" ");
                 euid.setText("");
                 epwd.setText("");
 
                 eun.requestFocus();
+                return;
+
             }
+
 
             else if(bluid == false){
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Wrong UserID")
+                builder.setMessage("Invalid UserID")
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -98,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 euid.setText("");
 
             }
-            else{
+            else if (blpwd == false) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Invalid Password")
                         .setCancelable(false)
@@ -114,14 +122,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 epwd.requestFocus();
             }
 
+            else
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Enter Student Name")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //do things
+                            }
+                        });
+            }
+
 
         }
 
         if(v == btnclr)
         {
-            eun.setText(" ");
-            euid.setText(" ");
-            epwd.setText(" ");
+            eun.setText("");
+            euid.setText("");
+            epwd.setText("");
             eun.requestFocus();
         }
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     TextView tvfee,tvhour,tvtotfee,tvtothour,tverr;
     RadioGroup rdg;
 
+    public static double reset = 0;
 
     public static double originalPrice =0;
     public static double totalfees =0;
@@ -62,10 +64,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         tvhour=findViewById(R.id.tvchours);
         tvtothour=findViewById(R.id.tvtothour);
         tvtotfee=findViewById(R.id.tvtotfee);
+        tvtotfee.setPaintFlags(tvtotfee.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         rdg = findViewById(R.id.radioGroup);
+        rdg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                totfee = 0;
+                tothour = 0;
+                chbacc.setChecked(false);
+                chbmed.setChecked(false);
+                tvtothour.setText(String.valueOf(reset));
+                tvtotfee.setText(String.valueOf(reset));
+            }
+        });
 
 
         tverr=findViewById(R.id.txterror);
+        tverr.setText("Graduate Student Can Select Maximum Upto 21 Hours ");
 
         Intent inlog = getIntent();
         Bundle b = inlog.getExtras();
@@ -110,17 +127,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-    private Course getCourseObj(String coursename) {
-
-        for(int i=0;i<courseList.size();i++)
-        {
-            if(coursename.equals(courseList.get(i).getCoursename()))
-                return courseList.get(i);
-        }
-        return null;
-    }
-
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         tempCourseNames.clear();
@@ -140,167 +146,96 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-    /*public  void checkrdbtn(View v)
-    {
-        int rid = rdg.getCheckedRadioButtonId();
-
-        tvtotfee.setText(String.valueOf(rid));
-       // rdb = findViewById(rid);
-
-//        String rdbval = String.valueOf(rdb.getText());
-
-        totfee = 0;
-        tothour = 0;
-
-      *//*  if (rdbval == "Graduated")
-        {
-            double currentfees = Double.parseDouble(tvfee.getText().toString());
-            double currenthour = Double.parseDouble(tvhour.getText().toString());
-
-
-            if (currenthour <= 21)
-            {
-
-                totfee += currentfees;
-                tvtotfee.setText(String.valueOf(totfee));
-                tothour += currenthour;
-                tvtothour.setText(String.valueOf(tothour));
-            }
-            else
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Sorry! Limit Exceeded")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //do things
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        }
-    *//*
-
-    }
-*/
     @Override
     public void onClick(View v) {
 
-        double reset = 0;
 
-        double currentfees = Double.parseDouble(tvfee.getText().toString());
-        double currenthour = Double.parseDouble(tvhour.getText().toString());
 
         //  checkrdbtn(v);
         if (v == btnadd) {
 
-
-            //Log.i("RIDD", "grad");
-           // double th = Double.parseDouble(tvtothour.getText().toString());
-            if(tothour < 21)
-            {
-                totfee += currentfees;
-                tvtotfee.setText(String.valueOf(totfee));
-                tothour += currenthour;
-                tvtothour.setText(String.valueOf(tothour));
-            }
-            else
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("Sorry ! Can't Add")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //do things
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-
-
-/*
-            rdg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                    tvtotfee.setText(String.valueOf(reset));
-                    tvtothour.setText(String.valueOf(reset));
-
-
-                    int selectedId = rdg.getCheckedRadioButtonId();
-                    // Log.i("RID", String.valueOf(selectedId));
-
-                    if (selectedId == 2131230985) {
-
-                        //Log.i("RIDD", "grad");
-                        double th = Double.parseDouble(tvtothour.getText().toString());
-                        if(th < 21)
-                        {
-                            totfee += currentfees;
-                            tvtotfee.setText(String.valueOf(totfee));
-                            tothour += currenthour;
-                            tvtothour.setText(String.valueOf(tothour));
-                        }
-                        else
-                        {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                            builder.setMessage("Sorry ! Can't Add")
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            //do things
-                                        }
-                                    });
-                            AlertDialog alert = builder.create();
-                            alert.show();
-                        }
-
-
-                    } else if (selectedId == 2131230986) {
-
-                        Log.i("RIDD1", "ungrad");
-
-
-                    }
-
-                }
-            });
-*/
-        }
-        }
-
-
-
-    /*public void onClick(View v) {
-
-        if (v == btnadd)
-        {
-
-            checkrdbtn(v);
-
-           *//* double currentfees = Double.parseDouble(tvfee.getText().toString());
+            double currentfees = Double.parseDouble(tvfee.getText().toString());
             double currenthour = Double.parseDouble(tvhour.getText().toString());
 
-                String rc = String.valueOf(rdb.getText());
+            int selectedId = rdg.getCheckedRadioButtonId();
+           //  Log.i("RID", String.valueOf(selectedId));
+            //Log.i("RIDD", "grad");
+           // double th = Double.parseDouble(tvtothour.getText().toString());
 
-                if(rc == "Graduated")
-                // tvtotfee.setText(String.valueOf(currentfees));
-                    //tvtothour.setText(String.valueOf(currenthour));
-                {
-                    double th = Double.parseDouble(tvtothour.getText().toString());
-                    if(th < 21)
-                    {
-                        totfee += currentfees;
+            //tothour = Double.parseDouble(tvtothour.getText().toString());
+
+           if(selectedId == 2131230985) {
+
+               tverr.setText("Graduate Student Can Select Maximum Upto 21 Hours ");
+
+               if (tothour < 21) {
+
+                   totfee += currentfees;
+                   tothour += currenthour;
+
+                   if (tothour > 21) {
+
+                       totfee -= currentfees;
+                       tothour -= currenthour;
+
+                       tvtotfee.setText(String.valueOf(totfee));
+                       tvtothour.setText(String.valueOf(tothour));
+
+                       AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                       builder.setMessage("Sorry ! You Can't Add This Course")
+                               .setCancelable(false)
+                               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                   public void onClick(DialogInterface dialog, int id) {
+                                       //do things
+                                   }
+                               });
+                       AlertDialog alert = builder.create();
+                       alert.show();
+                   }
+                   else
+                   {
+                       tvtotfee.setText(String.valueOf(totfee));
+                       tvtothour.setText(String.valueOf(tothour));
+
+                   }
+
+               } else   {
+
+
+                   AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                   builder.setMessage("Sorry ! You Can't Add This Course")
+                           .setCancelable(false)
+                           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                               public void onClick(DialogInterface dialog, int id) {
+                                   //do things
+                               }
+                           });
+                   AlertDialog alert = builder.create();
+                   alert.show();
+
+
+               }
+           }
+
+            else if(selectedId == 2131230986) {
+
+               tverr.setText("*Graduate Student Can Select Maximum Upto 21 Hours\n*Undergraduate Student Can Select Maximum Upto 19 Hours ");
+
+               if (tothour < 19) {
+
+                    totfee += currentfees;
+                    tothour += currenthour;
+
+                    if (tothour > 21) {
+
+                        totfee -= currentfees;
+                        tothour -= currenthour;
+
                         tvtotfee.setText(String.valueOf(totfee));
-                        tothour += currenthour;
                         tvtothour.setText(String.valueOf(tothour));
-                    }
-                    else
-                    {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setMessage("Maximum hours added")
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("Sorry ! You Can't Add This Course")
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -310,39 +245,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         AlertDialog alert = builder.create();
                         alert.show();
                     }
+                    else
+                    {
+                        tvtotfee.setText(String.valueOf(totfee));
+                        tvtothour.setText(String.valueOf(tothour));
+
+                    }
                 }
 
+                else   {
 
-           /* if(rdbgrad.isSelected())
-            {
-                if(currenthour <= 21)
-                {
-                    tvtotfee.setText(String.valueOf(currentfees));
-                    tvtothour.setText(String.valueOf(currenthour));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("Sorry ! You Can't Add This Course")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //do things
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
                 }
-                else
-                {
-                    tverr.setText("Sorry!Can't Select");
-                }
+
             }
-
-            else if (rdbungrad.isSelected())
-            {
-                if(currenthour <= 19 )
-                {
-                    tvtotfee.setText(String.valueOf(currentfees));
-                    tvtothour.setText(String.valueOf(currenthour));
-                }
-                else
-                {
-                    tverr.setText("Sorry!Can't Select");
-                }
-            }*//*
 
 
         }
-
-    }*/
+        }
 
 
 
